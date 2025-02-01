@@ -39,7 +39,7 @@ const logInUserToDb = async ( user: TUser ) => {
     //jwt
     const jwtpayload = {
         email: registeredUser.email,
-        role: registeredUser.email,
+        role: registeredUser.role,
     }
 
     const accessToken = jwt.sign( jwtpayload, config.jwt_access_token as string, { expiresIn: config.jwt_access_expires as string })
