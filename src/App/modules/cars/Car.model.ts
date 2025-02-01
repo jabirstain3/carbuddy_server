@@ -25,7 +25,7 @@ const CarSchema = new Schema<TCar> ({
         type: Number,
         required: [true, "Doors is required"],
     },
-    catagory: {
+    category: {
         type: String,
         required: [true, "Catagory is required"],
     },
@@ -85,6 +85,7 @@ const CarSchema = new Schema<TCar> ({
         type: Boolean
     }
 })
+
 
 export const CarModule = model<TCar>('Cars', CarSchema) 
 

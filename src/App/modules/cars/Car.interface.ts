@@ -7,7 +7,7 @@ export type TCar = {
     name: string,
     image: string,
     doors: number,
-    catagory: string,
+    category: string,
     passengers: number,
     transmission: "Automatic | Manual",
     area: TArea,
@@ -21,5 +21,5 @@ export type TCar = {
     mileage: string,
     features: string[],
     addfeatures: string[],
-    isDeleted?: boolean,
+    isDeleted?: true,
 }
