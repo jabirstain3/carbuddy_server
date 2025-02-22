@@ -6,9 +6,23 @@ import { AdminRoutes } from "./App/modules/admin/Admin.route";
 
 const app: Application = express()
 
+const allOrigins = [
+    'https://carbuddy.vercel.app',
+    'http://localhost:5173'
+]
+
 //  Perser
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true,
+    }));
 
 // routes
 app.use('/api/admin', AdminRoutes);

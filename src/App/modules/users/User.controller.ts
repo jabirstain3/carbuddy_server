@@ -27,14 +27,12 @@ const logInUser = CatchAsync ( async ( req, res ) => {
     });
 });
 
-
-const updateUser = CatchAsync ( async ( req, res ) => {
+const getSingleUser = CatchAsync ( async ( req, res ) => {
     const { user_id } = req.params
-    const result = await UserServices.updateUseronDb( user_id, req.body );
-
+    const result = await UserServices.getSingleUserFromDb( user_id );
     res.status(200).json({
         success: true,
-        message: 'User Updated successfully!',
+        message: 'users Retrive successfully!',
         data: result,
     });
 });
@@ -49,11 +47,21 @@ const getAllUser = CatchAsync ( async ( req, res ) => {
     });
 });
 
+const updateUser = CatchAsync ( async ( req, res ) => {
+    const { user_id } = req.params
+    const result = await UserServices.updateUseronDb( user_id, req.body );
 
+    res.status(200).json({
+        success: true,
+        message: 'User Updated successfully!',
+        data: result,
+    });
+});
 
 export const userControlers = {
     registerUser,
     logInUser,
+    getSingleUser, 
     getAllUser,
     updateUser,
 };

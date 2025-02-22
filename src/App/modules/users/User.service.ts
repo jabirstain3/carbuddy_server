@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 
 const registerUserToDb = async ( user: TUser ) => {
     // user exixtence
-    if ( await UserModule.findOne({ email: user.email}) ) {
+    if ( await UserModule.findOne({ email: user.email})) {
         throw new Error("This e-mail is linked to an existing user");
     }
 
@@ -17,11 +17,14 @@ const registerUserToDb = async ( user: TUser ) => {
 const logInUserToDb = async ( user: TUser ) => {
     const registeredUser = await UserModule.findOne({ email: user.email})
 
-    // user exixtence
+    // user existence
     if ( ! registeredUser ) {
         throw new Error("User is not registered");
     }
 
+    if ( registeredUser.role != "User") {
+        throw new Error("User is not registered");
+    }
 
     // user active status 
     if(user.status === "Blocked") {
@@ -38,8 +41,11 @@ const logInUserToDb = async ( user: TUser ) => {
 
     //jwt
     const jwtpayload = {
+        userName: registeredUser.username,
         email: registeredUser.email,
         role: registeredUser.role,
+        id: registeredUser._id,
+
     }
 
     const accessToken = jwt.sign( jwtpayload, config.jwt_access_token as string, { expiresIn: config.jwt_access_expires as string })
@@ -49,10 +55,8 @@ const logInUserToDb = async ( user: TUser ) => {
     return { accessToken, refreshToken, }
 }
 
-
-
-const updateUseronDb = async ( id: string, user: TUser ) => {
-    const responce = await UserModule.findByIdAndUpdate( id, user );
+const getSingleUserFromDb = async ( id: string) => {
+    const responce = await UserModule.findOne({ _id: id});
     return responce;
 }
 
@@ -61,10 +65,15 @@ const getAllUserFromDb = async () => {
     return responce;
 }
 
+const updateUseronDb = async ( id: string, user: TUser ) => {
+    const responce = await UserModule.findByIdAndUpdate( id, user );
+    return responce;
+}
 
 export const UserServices = {
     registerUserToDb,
     logInUserToDb,
+    getSingleUserFromDb,
     getAllUserFromDb,
     updateUseronDb,
 }

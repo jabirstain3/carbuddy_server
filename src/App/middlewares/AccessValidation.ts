@@ -53,8 +53,6 @@ export const AccessValidation = () => {
                 throw new Error("You are not authorized to access this route");
             }
         }
-
-
         next();
     });
 } 
