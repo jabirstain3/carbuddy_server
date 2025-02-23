@@ -17,6 +17,8 @@ const registerUserToDb = async ( user: TUser ) => {
 const logInUserToDb = async ( user: TUser ) => {
     const registeredUser = await UserModule.findOne({ email: user.email})
 
+    // console.log(registeredUser);
+    
     // user existence
     if ( ! registeredUser ) {
         throw new Error("User is not registered");
@@ -49,7 +51,7 @@ const logInUserToDb = async ( user: TUser ) => {
     }
 
     const accessToken = jwt.sign( jwtpayload, config.jwt_access_token as string, { expiresIn: config.jwt_access_expires as string })
-
+    
     const refreshToken = jwt.sign( jwtpayload, config.jwt_refresh_token as string, { expiresIn: config.jwt_refresh_expires as string })
 
     return { accessToken, refreshToken, }

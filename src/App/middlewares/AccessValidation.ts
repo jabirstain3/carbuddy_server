@@ -7,29 +7,35 @@ import { AdminModule } from "../modules/admin/Admin.model";
 
 export const AccessValidation = () => {
     return CatchAsync( async (req: Request, res: Response, next: NextFunction ) => {
-        const accessToken  = req.headers.authorization;
+        const authHeader  = req.headers.authorization;
         
-        if( !accessToken ) {
+        if( !authHeader || !authHeader.startsWith('Bearer ')) {
             throw new Error("You are not authorized to access this route");
         }
+        
+        const accessToken = authHeader.split(' ')[1];
 
-        const varifiedToken =jwt.verify(
-            accessToken as string,
-            config.jwt_access_token as string
-        );
+        let verifiedToken: JwtPayload;
+        try {
+            verifiedToken = jwt.verify(accessToken, config.jwt_access_token) as JwtPayload;
+        } 
+        // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+        catch (error) {
+            throw new Error("Invalid token");
+        }
 
-        const { email, role } = varifiedToken as JwtPayload;
+        const { email, role } = verifiedToken;
 
         if( role === "User") {
-            const {user_id:id} = req.params;
+            const { user_id:id } = req.params;
 
-            const user = await UserModule.findOne({_id: id});
+            const user = await UserModule.findOne({ _id: id });
     
-            if(!user){
+            if( !user ){
                 throw new Error("User not found");
             }
     
-            if(user.status === "Blocked"){
+            if( user.status === "Blocked" ){
                 throw new Error("User is Blocked");
             }
 
@@ -38,8 +44,8 @@ export const AccessValidation = () => {
             }
         }
         else {
-            const {admin_id:id} = req.params;
-            const admin = await AdminModule.findOne({_id: id});
+            const { admin_id:id } = req.params;
+            const admin = await AdminModule.findOne({ _id: id });
     
             if( !admin ){
                 throw new Error("Admin not found");
