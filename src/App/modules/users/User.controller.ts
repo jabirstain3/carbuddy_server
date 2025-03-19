@@ -2,6 +2,7 @@ import config from "../../config";
 import { CatchAsync } from "../../utils/CatchAsync";
 import { UserServices } from "./User.service";
 
+// register user
 const registerUser = CatchAsync ( async ( req, res ) => {
     const result = await UserServices.registerUserToDb( req.body );
 
@@ -12,6 +13,7 @@ const registerUser = CatchAsync ( async ( req, res ) => {
     });
 });
 
+// login user
 const logInUser = CatchAsync ( async ( req, res ) => {
     const { accessToken, refreshToken } = await UserServices.logInUserToDb( req.body );
     res.cookie( "refreshToken", refreshToken, {
@@ -27,6 +29,7 @@ const logInUser = CatchAsync ( async ( req, res ) => {
     });
 });
 
+// get single user
 const getSingleUser = CatchAsync ( async ( req, res ) => {
     const { user_id } = req.params
     const result = await UserServices.getSingleUserFromDb( user_id );
@@ -37,6 +40,7 @@ const getSingleUser = CatchAsync ( async ( req, res ) => {
     });
 });
 
+// get all user
 const getAllUser = CatchAsync ( async ( req, res ) => {
     const result = await UserServices.getAllUserFromDb();
 
@@ -47,6 +51,7 @@ const getAllUser = CatchAsync ( async ( req, res ) => {
     });
 });
 
+// update user
 const updateUser = CatchAsync ( async ( req, res ) => {
     const { user_id } = req.params
     const result = await UserServices.updateUseronDb( user_id, req.body );
@@ -58,10 +63,23 @@ const updateUser = CatchAsync ( async ( req, res ) => {
     });
 });
 
+//delete user
+const deleteUser = CatchAsync ( async ( req, res ) => {
+    const { user_id } = req.params
+    await UserServices.deleteUserFromDb( user_id );
+
+    res.status(200).json({
+        success: true,
+        message: 'User Deleted successfully!',
+    });
+})
+
+// export all user controlers
 export const userControlers = {
     registerUser,
     logInUser,
     getSingleUser, 
     getAllUser,
     updateUser,
+    deleteUser,
 };

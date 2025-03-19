@@ -2,9 +2,13 @@ import { model, Schema } from "mongoose";
 import { TReview, TReviewer } from "./Review.interface";
 
 const ReviewerSchema = new Schema<TReviewer>  ({
-    userEmail: {
+    userId: {
         type: String,
-        required: [true, "User email is required"],
+        required: [true, "User ID is required"],
+    },
+    userName: {
+        type: String,
+        required: [true, "User name is required"],
     },
     image: {
         type: String,

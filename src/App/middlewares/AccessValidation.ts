@@ -5,15 +5,20 @@ import config from "../config";
 import { UserModule } from "../modules/users/User.model";
 import { AdminModule } from "../modules/admin/Admin.model";
 
-export const AccessValidation = () => {
+export const AccessValidation = ( ...roles: string[] ) =>{
     return CatchAsync( async (req: Request, res: Response, next: NextFunction ) => {
         const authHeader  = req.headers.authorization;
-        
+        // console.log(authHeader);
+
         if( !authHeader || !authHeader.startsWith('Bearer ')) {
-            throw new Error("You are not authorized to access this route");
+            throw new Error("You are not authorized to access this route 1");
         }
-        
+
         const accessToken = authHeader.split(' ')[1];
+
+        if (!config.jwt_access_token) {
+            throw new Error("JWT configuration is missing");
+        }
 
         let verifiedToken: JwtPayload;
         try {
@@ -24,28 +29,21 @@ export const AccessValidation = () => {
             throw new Error("Invalid token");
         }
 
-        const { email, role } = verifiedToken;
+        const { role, email, } = verifiedToken;
 
         if( role === "User") {
-            const { user_id:id } = req.params;
-
-            const user = await UserModule.findOne({ _id: id });
+            const user = await UserModule.findOne({ email });
     
-            if( !user ){
+            if(!user){
                 throw new Error("User not found");
             }
     
-            if( user.status === "Blocked" ){
+            if(user.status === "Blocked"){
                 throw new Error("User is Blocked");
-            }
-
-            if( email !== user.email || role !== user.role ){
-                throw new Error("You are not authorized to access this route");
             }
         }
         else {
-            const { admin_id:id } = req.params;
-            const admin = await AdminModule.findOne({ _id: id });
+            const admin = await AdminModule.findOne({ email });
     
             if( !admin ){
                 throw new Error("Admin not found");
@@ -54,11 +52,12 @@ export const AccessValidation = () => {
             if( admin.status === "Blocked"){
                 throw new Error("Admin is Blocked");
             }
-
-            if( email !== admin.email || role !== admin.role ){
-                throw new Error("You are not authorized to access this route");
-            }
         }
-        next();
+
+        if(!roles.includes(role)){
+            throw new Error("You are not authorized to access this route (role)");
+        }
+
+        next()
     });
-} 
+};
