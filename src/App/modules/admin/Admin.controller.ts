@@ -1,11 +1,15 @@
 import config from "../../config";
-import { CatchAsync } from "../../utils/CatchAsync";
+import CatchAsync from "../../utils/CatchAsync";
 import { AdminServices } from "./Admin.service";
+import responseDelivery from "../../utils/responseDelevery";
+import status from "http-status";
+
 
 const registerAdmin = CatchAsync ( async ( req, res ) => {
     const result = await AdminServices.registerAdminToDb( req.body );
 
-    res.status(200).json({
+    responseDelivery(res, {
+        statusCode: status.OK,
         success: true,
         message: 'Admin registered  successfully!',
         data: result,
@@ -20,7 +24,8 @@ const logInAdmin = CatchAsync ( async ( req, res ) => {
 
     } )
 
-    res.status(200).json({
+    responseDelivery(res, {
+        statusCode: status.OK,
         success: true,
         message: 'Admin loged in  successfully!',
         data: accessToken,
@@ -32,7 +37,8 @@ const updateAdmin = CatchAsync ( async ( req, res ) => {
     const { admin_id } = req.params
     const result = await AdminServices.updateAdminonDb( admin_id, req.body );
 
-    res.status(200).json({
+    responseDelivery(res, {
+        statusCode: status.OK,
         success: true,
         message: 'Admin Updated successfully!',
         data: result,
@@ -42,7 +48,8 @@ const updateAdmin = CatchAsync ( async ( req, res ) => {
 const getAllAdmin = CatchAsync ( async ( req, res ) => {
     const result = await AdminServices.getAllAdminFromDb();
 
-    res.status(200).json({
+    responseDelivery(res, {
+        statusCode: status.OK,
         success: true,
         message: 'admins Retrive successfully!',
         data: result,

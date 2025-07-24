@@ -1,11 +1,14 @@
-import { CatchAsync } from "../../utils/CatchAsync";
+import CatchAsync from "../../utils/CatchAsync";
 import { ReviewServices, } from "./Review.service";
+import responseDelivery from "../../utils/responseDelevery";
+import status from "http-status";
 
 // add review to a care
 const addReview = CatchAsync ( async ( req, res ) => {
     const result = await ReviewServices.addReviewToDb(req.body);
 
-    res.status(200).json({
+    responseDelivery(res, {
+        statusCode: status.OK,
         success: true,
         message: 'Review registered  successfully!',
         data: result,
@@ -16,7 +19,8 @@ const addReview = CatchAsync ( async ( req, res ) => {
 const getAllReviews = CatchAsync ( async ( req, res ) => {
     const result = await ReviewServices.getAllReviewsFromDb();
 
-    res.status(200).json({
+    responseDelivery(res, {
+        statusCode: status.OK,
         success: true,
         message: 'Users Retrive successfully!',
         data: result,
@@ -28,7 +32,8 @@ const getReviewsOfCar = CatchAsync ( async ( req, res ) => {
     const { id } = req.params
     const result = await ReviewServices.getReviewsByCaridFromDb(id);
 
-    res.status(200).json({
+    responseDelivery(res, {
+        statusCode: status.OK,
         success: true,
         message: 'Users Retrive successfully!',
         data: result,
@@ -39,7 +44,8 @@ const updateReview = CatchAsync ( async ( req, res ) => {
     const { id } = req.params
     const result = await ReviewServices.updateReview(id);
 
-    res.status(200).json({
+    responseDelivery(res, {
+        statusCode: status.OK,
         success: true,
         message: 'Users Retrive successfully!',
         data: result,
@@ -50,7 +56,8 @@ const deleteReview = CatchAsync ( async ( req, res ) => {
     const { id } = req.params
     const result = await ReviewServices.deleteReview(id);
 
-    res.status(200).json({
+    responseDelivery(res, {
+        statusCode: status.OK,
         success: true,
         message: 'Users Retrive successfully!',
         data: result,

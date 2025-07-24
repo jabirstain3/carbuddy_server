@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { CatchAsync } from "../utils/CatchAsync";
+import CatchAsync from "../utils/CatchAsync";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../config";
 import { UserModule } from "../modules/users/User.model";

@@ -22,15 +22,19 @@ const logInUserToDb = async ( user: TUser ) => {
     
     // user existence
     if ( ! registeredUser ) {
+        // console.log("User is not registered");
         throw new Error("User is not registered");
+        
     }
 
     if ( registeredUser.role != "User") {
+        // console.log("User is not registered");
         throw new Error("User is not registered");
     }
 
     // user active status 
     if(user.status === "Blocked") {
+        // console.log("User is blocked");
         throw new Error("User is blocked");
     }
 
@@ -39,6 +43,7 @@ const logInUserToDb = async ( user: TUser ) => {
 
     // Acecess
     if (! registered) {
+        // console.log("password dosent matched");
         throw new Error("password dosent matched");
     }
 
