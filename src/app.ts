@@ -1,10 +1,8 @@
 import express, { Application, Request, Response }  from "express";
 import cors from 'cors';
 import globalErrorHandler from "./App/middlewares/globalErrorHandler";
-import { UserRoutes } from "./App/modules/users/User.route";
-import { CarRoutes } from "./App/modules/cars/Car.route";
-import { AdminRoutes } from "./App/modules/admin/Admin.route";
 import notFound from "./App/middlewares/notFound";
+import router from "./App/routes";
 
 const app: Application = express()
 
@@ -27,9 +25,10 @@ app.use(cors({
     }));
 
 // routes
-app.use('/api/admin', AdminRoutes);
-app.use('/api/users', UserRoutes);
-app.use('/api/cars', CarRoutes);
+app.use('/api', router);
+// app.use('/api/admin', AdminRoutes);
+// app.use('/api/users', UserRoutes);
+// app.use('/api/cars', CarRoutes);
 
 app.get('/', ( req: Request, res: Response ) => {
     res.send('Server is running perfectly')

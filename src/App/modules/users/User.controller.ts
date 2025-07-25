@@ -22,7 +22,6 @@ const logInUser = CatchAsync ( async ( req, res ) => {
     res.cookie( "refreshToken", refreshToken, {
         httpOnly: true,
         secure: config.NODE_ENV === "production",
-
     } )
 
     responseDelivery(res, {

@@ -39,10 +39,10 @@ const logInUserToDb = async ( user: TUser ) => {
     }
 
     // match passwords
-    const registered = isComnfirmed( user.password, registeredUser.password );
+    const registered = await isComnfirmed( user.password, registeredUser.password );
 
     // Acecess
-    if (! registered) {
+    if (registered === false) {
         // console.log("password dosent matched");
         throw new Error("password dosent matched");
     }
